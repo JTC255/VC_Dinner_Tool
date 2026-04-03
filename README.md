@@ -147,7 +147,7 @@ The interface is a single-page browser app with the following fields:
 | Anthropic API Key | Your `sk-ant-...` key from console.anthropic.com |
 | Google API Key | Your Gemini key from aistudio.google.com |
 | Event Focus | Free-text prompt describing the dinner theme |
-| Ensemble Mode | Checkbox — checked = Claude + Gemini, unchecked = Claude only |
+| Ensemble Mode | Checkbox indicating preference for ensemble mode |
 | Resumes | Drag & drop, browse files, or choose folder (PDF, DOCX, TXT) |
 
 ---
@@ -161,16 +161,15 @@ The interface is a single-page browser app with the following fields:
 **Step 3.** Enter an event focus prompt. Be specific — the rubric quality depends directly on the clarity of your prompt.
 
 Good examples:
-- `AI infrastructure founders with strong technical depth`
 - `Healthcare founders at seed or Series A with clinical or ops background`
-- `Founding engineers with startup experience and product instinct`
+- `Founding engineers with startup and product design experience`
 - `Enterprise data infra operators relevant to the Databricks ecosystem`
-- `Hard tech / deep tech founders with PhDs or research backgrounds`
+- `Hard tech founders with PhDs or research backgrounds`
 
 Vague examples to avoid:
 - `Founders`
 - `Good candidates`
-- `People for the dinner`
+- `VC People for the dinner`
 
 **Step 4.** Upload resumes. You can drag and drop multiple files, use the file browser, or select an entire folder. Folder upload works best in Chrome or Edge.
 
@@ -178,7 +177,7 @@ Vague examples to avoid:
 
 **Step 6.** Click **Generate Rubric & Score**.
 
-**Step 7.** Wait. Processing typically takes 10–15 minutes for a medium batch.
+**Step 7.** Wait. Processing typically takes ~15-20 minutes for a medium batch.
 
 **Step 8.** Review results in the browser and download the artifacts.
 
@@ -188,14 +187,9 @@ Vague examples to avoid:
 
 Users supply their own API keys. The backend temporarily sets environment variables for the duration of each request, instantiates the model clients, and restores the previous environment in a `finally` block.
 
-Keys are not logged or persisted in application output. However, users should treat them with standard caution:
+Keys are not logged or persisted in application output.
 
-- Do not share keys publicly or check them into source control
-- Rotate keys if exposed
-- Use separate keys from your personal projects if possible
-- Be aware that you are calling Anthropic and Google APIs directly — usage costs are charged to your accounts
-
-### Where to get keys
+### Keys source:
 
 | Provider | URL |
 |---|---|
@@ -212,7 +206,7 @@ Keys are not logged or persisted in application output. However, users should tr
 | `.docx` | python-docx |
 | `.txt` | Standard UTF-8 read |
 
-Maximum upload size per request: **250 MB total**.
+Current maximum upload size per request: **250 MB total**. Set in app.py
 
 Resume quality affects output quality. Scanned PDFs with poor OCR, sparse résumés, and heavily formatted documents (tables, columns, graphics) may not parse cleanly, which can reduce scoring accuracy.
 
@@ -335,7 +329,7 @@ The app reads `ANTHROPIC_API_KEY` and `GOOGLE_API_KEY` from environment variable
 
 ## Limitations
 
-This tool is designed to accelerate triage, not replace judgment.
+This tool is designed to provide a recommendation pipeline to accelerate candidate review, not replace judgment. This tool has not been rigorously evaluated by a statistician. 
 
 **LLM scoring is imperfect.** Rubric generation and scoring are model-generated and can vary between runs. The ensemble mode reduces variance but does not eliminate it.
 
@@ -345,7 +339,7 @@ This tool is designed to accelerate triage, not replace judgment.
 
 **Ensemble mode is slower and more expensive.** Two models, twice the API cost, meaningfully more wall-clock time.
 
-**Ranking weights are fixed.** The 60/40 Crackedness/Fit split is hardcoded. If your event prioritizes Fit more heavily, that is not currently configurable in the UI.
+**Ranking weights are fixed.** The 60/40 Crackedness/Fit split is hardcoded. If your event prioritizes Fit more heavily, that isn't currently configurable in the UI. Code must be changed. 
 
 **This is a triage tool, not a decision engine.** Use the output to prioritize your manual review, not to replace it. The final selection should involve a human reviewing the top-ranked candidates directly.
 
@@ -382,13 +376,13 @@ Users upload candidate resume data and provide their own API keys. This tool sho
 
 - If used in a formal recruiting or investor workflow, self-hosting is preferable to using a shared instance
 - Resume files are written to a temporary run directory on the server for the duration of processing and download
-- There is no authentication on the hosted instance — do not upload confidential materials to a shared deployment without understanding that
+- There is no authentication on the hosted instance — Please note this when uploading confidential materials to a shared deployment
 
 ---
 
 ## Future Improvements
 
-Potential next steps for this project:
+Potential next steps to improve this project:
 
 - Configurable ranking weights via the UI
 - Authentication for the hosted instance
@@ -405,7 +399,6 @@ Potential next steps for this project:
 
 ## License
 
-Add your preferred license here. Options:
-- MIT — open source, anyone can fork and use
-- Source-available / BSL — visible but restricted commercial use
-- Private — internal use only
+All rights, title, and interest in and to the VC Dinner Tool, including all 
+source code, documentation, and associated materials, are hereby transferred 
+and assigned to Databricks, Inc.
