@@ -245,20 +245,6 @@ A zip archive containing one JSON file per candidate with:
 
 ---
 
-## Repository Structure
-
-```
-VC_Dinner_Tool/
-├── app.py               # Flask backend — routes, orchestration, file handling
-├── index.html           # Single-page frontend UI
-├── create_rubric.py     # Rubric generation pipeline (Claude + Gemini ensemble)
-├── score_resumes.py     # Resume scoring, ranking, spreadsheet + JSON output
-├── requirements.txt     # Python dependencies
-└── index.py             # Vercel/gunicorn entrypoint (imports app from app.py)
-```
-
----
-
 ## Tech Stack
 
 **Backend**
@@ -334,6 +320,20 @@ If you use gunicorn, add it to `requirements.txt`.
 4. Set build command: `pip install -r requirements.txt`
 5. Set start command: `gunicorn app:app --bind 0.0.0.0:$PORT`
 6. Deploy
+
+---
+
+## Repository Structure
+
+```
+VC_Dinner_Tool/
+├── app.py               # Flask backend — routes, orchestration, file handling
+├── index.html           # Single-page frontend UI
+├── create_rubric.py     # Rubric generation pipeline (Claude + Gemini ensemble)
+├── score_resumes.py     # Resume scoring, ranking, spreadsheet + JSON output
+├── requirements.txt     # Python dependencies
+└── index.py             # Vercel/gunicorn entrypoint (imports app from app.py)
+```
 
 ### Environment notes
 
