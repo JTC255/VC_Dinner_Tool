@@ -389,7 +389,7 @@ Potential next steps to improve this project:
 - Side-by-side candidate comparison
 - Support for more file types (e.g., Google Docs Link)
 - Google Forms integration (auto-ingest resume submissions from an application form)
-- Out of the box Profile and gunicorn functionality
+- Out of the box Procfile and gunicorn functionality
 
 ---
 
