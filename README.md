@@ -8,14 +8,14 @@ A lightweight agentic resume evaluation system for VC dinners, founder roundtabl
 
 ## Key Clarification: Railway Dependency
 
-**This tool is not dependent on Railway.** It is a standard Flask web app with a static HTML frontend and a single processing endpoint. It happens to be deployed on Railway, but it runs identically on Render, a bare VM, a local machine, or any Python-compatible host.
+**This tool is not dependent on Railway.** It is a standard Flask web app with a static HTML frontend and a single processing endpoint. For demonstration purposes we chose to host the tool on Railway, but it runs identically on alternate hosts such as Render, a bare VM, a local machine, or any Python-compatible host.
 
 The backend uses a temporary writable directory per run and exposes download routes for generated artifacts. There is no Railway-specific API or runtime dependency in the codebase.
 
 **Hosting options:**
 
-- **Default:** Use the hosted instance at `vcdinnertool-production.up.railway.app` — no setup required, just bring your API keys.
-- **Self-host:** Fork the repo and deploy your own instance (see [Self-Hosting](#self-hosting) below). Recommended for users who want full control over uptime, data handling, or cost.
+- **Default:** Use the hosted instance at `vcdinnertool-production.up.railway.app` — no setup required, just prepare your own API keys.
+- **Self-host:** Fork the repo and deploy your own instance (see [Self-Hosting](#self-hosting) below). Recommended for users who want full control over uptime, data handling, and or compute cost.
 
 ---
 
@@ -25,29 +25,27 @@ Instead of manually scanning a folder of resumes, this tool:
 
 1. Accepts a batch of uploaded resumes (PDF, DOCX, or TXT)
 2. Reads the candidate pool and samples it for context
-3. Generates a custom evaluation rubric tailored to your event focus
-4. Scores each candidate against that rubric using one or two LLMs
-5. Ranks candidates by a weighted composite score (60% Crackedness, 40% Fit)
-6. Returns downloadable outputs: a rubric JSON, an Excel rankings spreadsheet, and per-candidate score detail files
+3. Generates a custom evaluation rubric tailored to a user-specified event focus
+4. Scores each candidate against that rubric with one or two LLMs (Gemini, Claude)
+5. Ranks candidates by a weighted composite score (Currently weighted 60% Crackedness, 40% Fit)
+6. Returns outputs in downloadable format (i.e. a rubric JSON, an Excel rankings spreadsheet, and per-candidate score detail files)
 
 **Typical use cases:**
 
 - VC dinners and invite-only networking events
 - Demo day candidate triage
-- Founder roundtable curation
 - Internal candidate ranking before partner discussion
 
 ---
 
 ## Expected Runtime
 
-For a typical batch of resumes, expect roughly **10–15 minutes** end-to-end, especially in ensemble mode.
+For a typical batch of resumes, expect roughly **10–15 minutes** end-to-end, especially in ensemble mode. Ensemble mode uses both Claude and Gemini to score resumes, averaging the results for improved robustness (slower runtimes and higher token cost).
 
-Runtime depends on:
-- Number of resumes uploaded
-- Resume length and text quality
-- API latency from Anthropic and Google
-- Whether ensemble mode (Claude + Gemini) is enabled
+Runtime may depend on:
+- Resume Batch Size
+- Resume length
+- Ensemble mode Used (Claude + Gemini)
 
 Claude-only mode is meaningfully faster. Ensemble mode is slower but generally more robust, since two independent models must agree on a rubric and scores before a final ranking is produced.
 
@@ -106,24 +104,23 @@ Measures overall talent, achievement signal, and potential — how impressive th
 **Fit (0–100 points)**
 Measures alignment with the specific event focus. A great candidate who is completely irrelevant to the dinner theme will score high on Crackedness and low on Fit. A niche operator perfectly suited to the event will score the reverse.
 
-### How the Rubric Is Structured
+### Rubric Structure
 
 Each dimension is broken into 5–7 criteria. Each criterion has:
 - A name and description
 - A point allocation (all criteria within a dimension sum to 100)
 - A scoring guide with "high," "medium," and "low" bands
 
-The rubric is generated fresh for every run — it is not hardcoded. It is derived from:
+The rubric is dynamic and generated fresh for every run based on: 
 - The event focus prompt you provide
 - A sample of the actual resume pool being evaluated
 
-This means the rubric adapts to context. A batch of Series A healthcare founders produces different criteria than a batch of infrastructure engineers or founding operators.
+This allows for selection criteria to be industry or task specific. 
 
 ### Scoring Precision
 
 The scorer explicitly instructs the model to:
 - Use decimal precision (e.g., 14.7, not 15.0)
-- Avoid clustering scores around round values
 - Reserve top scores for rare, exceptional candidates
 - Justify each score with specific resume evidence
 
@@ -135,13 +132,13 @@ This creates meaningful separation within a competitive batch rather than a flat
 Composite Score = (0.6 × Crackedness) + (0.4 × Fit)
 ```
 
-Crackedness is weighted more heavily by default, reflecting the view that raw talent matters more than perfect event fit. This weighting is hardcoded in the current version.
+Crackedness is weighted more heavily by default, reflecting the view that raw talent matters more than perfect event fit. This 60/40 weighting is hardcoded in the current version.
 
 ---
 
 ## User Interface
 
-![Databricks VC Founder Resume Evaluation UI](https://vcdinnertool-production.up.railway.app)
+![UI Screenshot](./img/home.png)
 
 The interface is a single-page browser app with the following fields:
 
