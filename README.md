@@ -396,5 +396,4 @@ Potential next steps to improve this project:
 ## License
 
 All rights, title, and interest in and to the VC Dinner Tool, including all 
-source code, documentation, and associated materials, are hereby transferred 
-and assigned to Databricks, Inc.
+source code, documentation, and associated materials, are hereby assigned to Databricks, Inc.
