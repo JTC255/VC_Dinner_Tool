@@ -245,6 +245,20 @@ A zip archive containing one JSON file per candidate with:
 
 ---
 
+## Repository Structure
+
+```
+VC_Dinner_Tool/
+├── app.py               # Flask backend — routes, orchestration, file handling
+├── index.html           # Single-page frontend UI
+├── create_rubric.py     # Rubric generation pipeline (Claude + Gemini ensemble)
+├── score_resumes.py     # Resume scoring, ranking, spreadsheet + JSON output
+├── requirements.txt     # Python dependencies
+└── index.py             # Vercel/gunicorn entrypoint (imports app from app.py)
+```
+
+---
+
 ## Tech Stack
 
 **Backend**
@@ -356,26 +370,12 @@ This tool is designed to provide a recommendation pipeline to accelerate candida
 
 ---
 
-## Repository Structure
-
-```
-VC_Dinner_Tool/
-├── app.py               # Flask backend — routes, orchestration, file handling
-├── index.html           # Single-page frontend UI
-├── create_rubric.py     # Rubric generation pipeline (Claude + Gemini ensemble)
-├── score_resumes.py     # Resume scoring, ranking, spreadsheet + JSON output
-├── requirements.txt     # Python dependencies
-└── index.py             # Vercel/gunicorn entrypoint (imports app from app.py)
-```
-
----
-
 ## Security and Privacy Notes
 
 Users upload candidate resume data and provide their own API keys. This tool should be treated as handling sensitive materials.
 
 - If used in a formal recruiting or investor workflow, self-hosting is preferable to using a shared instance
-- Resume files are written to a temporary run directory on the server for the duration of processing and download
+- Resume files are written to a temporary run directory on the server for the duration of processing
 - There is no authentication on the hosted instance — Please note this when uploading confidential materials to a shared deployment
 
 ---
@@ -384,16 +384,12 @@ Users upload candidate resume data and provide their own API keys. This tool sho
 
 Potential next steps to improve this project:
 
-- Configurable ranking weights via the UI
-- Authentication for the hosted instance
 - Progress tracking and streaming updates during long runs
 - Rubric editing / review step before scoring begins
-- Side-by-side candidate comparison view
-- Persistent result history across sessions
-- Retry handling for partial failures during scoring
-- CSV export in addition to Excel
-- Support for more file types (e.g., Google Docs links)
-- Stronger production deployment setup with Procfile and gunicorn out of the box
+- Side-by-side candidate comparison
+- Support for more file types (e.g., Google Docs Link)
+- Google Forms integration (auto-ingest resume submissions from an application form)
+- Out of the box Profile and gunicorn functionality
 
 ---
 
